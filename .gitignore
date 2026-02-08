@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+api-dist/
+api/server.js
+api/src/
+
+# Environment
+.env
+.env.local
+.env.vercel
+.env.production
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Testing
+coverage/
+
+# Misc
+*.swp
+*.swo
+*~
+
+.wrangler/
+*code-workspace
+api/src
+dev-notes/
+docs/
+scripts-local/

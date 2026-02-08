@@ -1,0 +1,50 @@
+# Create matching resources in Cloudflare and plug in your IDs.
+# See: https://developers.cloudflare.com/workers/wrangler/configuration/
+
+name = "foosball-elo-tracker-api"
+main = "src/backend/index.ts"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+[observability]
+enabled = true
+
+# Hyperdrive for PostgreSQL (create in Cloudflare dashboard, link to Neon)
+[[hyperdrive]]
+binding = "HYPERDRIVE"
+id = "your-hyperdrive-id"
+localConnectionString = "postgresql://foosball:foosball@localhost:5433/foosball"
+
+# KV namespace for sessions (create with: wrangler kv namespace create SESSIONS_KV)
+[[kv_namespaces]]
+binding = "SESSIONS_KV"
+id = "your-kv-namespace-id"
+
+[durable_objects]
+bindings = [
+  { name = "STATS_HUB", class_name = "StatsHub" }
+]
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["StatsHub"]
+
+# R2 buckets (create in Cloudflare dashboard)
+[[r2_buckets]]
+binding = "PROFILE_IMAGES_R2"
+bucket_name = "your-profile-images-bucket"
+
+[[r2_buckets]]
+binding = "SEASON_ICONS_R2"
+bucket_name = "your-season-icons-bucket"
+
+[vars]
+ENVIRONMENT = "production"
+SESSION_TTL = "604800"
+INVITE_BASE_URL = "https://your-pages-url.pages.dev"
+FRONTEND_URL = "https://your-pages-url.pages.dev"
+
+# Secrets (set via: wrangler secret put SECRET_NAME)
+# - SESSION_SECRET (32+ character random string)
+# - RESEND_API_KEY (Resend API key for invitation emails)
